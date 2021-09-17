@@ -3,39 +3,49 @@ This program is designed to extract data on Mabinogi food from the Mabinogi wiki
 
 ## Usage
 
-#### Grabbing One Table
-```
-py scrapeFood.py [Mabinogi Wiki Link] [Food Table Index]
-```
-This command will print out the food into a dict format onto the command line. 
-
-For instance, if you would like to retrieve the entry 'Basil' from the list of vegetables, you would use the link [https://wiki.mabinogiworld.com/view/Vegetables]() and for the Food Table Index, would input 0, as it is the 0th table on that page. An example is provided below with usage and output.
-```
-py scrapeFood.py https://wiki.mabinogiworld.com/view/Vegetables 0
-
-{'Name': 'Basil', 'NPC Resale Value': '4 G', 'Method': 'Purchased', 'Edible': 'No', 'Hunger Restored': '-', 'Cooking EXP': '?', 'Purchase Location': 'Caitin / Shena / Effie (8g) / Flying Food Truck (8g)', 'Other Locations': '{{{Location}}}'}
-```
-
-#### Grabbing All Tables on Multiple URLs
-```
-py scrapeFood.py [Path to List of URLs]
-```
-This will allow you to grab all the tables from multiple URLs at one time.
-The file must have one URL per each line, much like the following:
+This program makes usage of the argparse Python library, as such you may use the following command to see command usage.
 
 ```
-https://wiki.mabinogiworld.com/view/Deep-frying_List
+py scrapeFood.py -h
+```
+
+There are two included programs within this program: **singleScrape** and **multiScrape**.
+
+### singleScrape
+This command will allow you to pick a food table from a Mabinogi wiki link. The default is the first table available; however, any table may be chosen.
+
+The command for singleScrape is as follows:
+```
+py scrapeFood.py singleScrape [-h] [-i I] link
+```
+The positional argument, link, is the link to the page, such as [this one](https://wiki.mabinogiworld.com/view/Baking_List). This is required.
+
+The optimal argument, -i, is the index of the table you wish to choose, 0 indexed. The default for this optional argument is 0. 
+
+The output will print out the table requested in JSON format.
+
+### multiScrape
+This command will allow you to pick from multiple URLs, and print or write out all tables from each URL into a file or the command line. Additionally, a mapping will be made from each food to the corresponding link, and if an output folder is chosen, will be written to groupToFood.json.
+
+The command for multiScrape is as follows:
+```
+py scrapeFood.py multiScrape [-h] [-o O] list
+```
+The positional argument, list, is the file path to a list of one or multiple Mabinogi wiki URL(s). The file format should look similar to below:
+```
 https://wiki.mabinogiworld.com/view/Baking_List
-https://wiki.mabinogiworld.com/view/Kneading_List
+https://wiki.mabinogiworld.com/view/Boiling_List
+https://wiki.mabinogiworld.com/view/Simmering_List
 ```
+The optional argument, -o, is a path to a folder you wish the JSONs to be written to. If this argument is not supplied, all JSON information will be printed onto the command line. If the folder does not exist, the folder will be created before writing.
 
-As an example, say the above is in a text file called **mabiURLs** in the same directory as scrapeFood.py, you would format the command as follows:
+For example, if we decide to put the links above into a file called urls.txt, and wish to write to a folder called jsons, we would have the following command
 ```
-py scrapeFood.py ./mabiURLs
+py scrapeFood.py multiScrape ./urls.txt ./jsons/
 ```
+This would then create four files, Baking_List.JSON, Boiling_List.JSON, Simmering_List.JSON, and groupToFood.JSON within a folder called jsons. The first three files would contain the tables in JSON format of their respective links, and the fourth would be a JSON list with food mapped to their respective file.
 
-The above will then return all tables from all 3 links.
 ## Planned Features
-The full version will allow you to export all information as JSON files. In addition each food will be mapped to their corresponding food group in a separate file.
+All currently planned features are finished!
 
 Thanks to the [Mabinogi Wiki](https://wiki.mabinogiworld.com/view/Wiki_Home) for all the information on Mabinogi food.

@@ -1,6 +1,6 @@
 #Check for commandline arguments
 import re
-def parseFoodTable(table, recipeKey):
+def scrapeFoodTable(table, recipeKey):
     #Locate the tbody of the table
     tbody = table.find('tbody')
     
