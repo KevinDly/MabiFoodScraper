@@ -9,7 +9,7 @@ This program makes usage of the argparse Python library, as such you may use the
 py scrapeFood.py -h
 ```
 
-There are two included programs within this program: **singleScrape** and **multiScrape**.
+There are two included commands within this program: **singleScrape** and **multiScrape**.
 
 ### singleScrape
 This command will allow you to pick a food table from a Mabinogi wiki link. The default is the first table available; however, any table may be chosen.
