@@ -1,6 +1,7 @@
 import requests, sys, re, json, os, argparse
 from bs4 import BeautifulSoup
 from wikiScrapers import scrapeFoodTable
+from convert import convertToTree
 recipeKey = 'Recipe'
 
 def dir_path(path):
@@ -26,6 +27,7 @@ def main():
     parser_multi = subparsers.add_parser('multiScrape', help='Allows you to obtain tables from multiple links')
     parser_multi.add_argument('list', type=argparse.FileType('r'), help='Path to a file containing a list of Mabinogi wiki URLs')
     parser_multi.add_argument('-o', type=dir_path, help='Path to a folder to write the files out to.')
+    parser_multi.add_argument('-t', action='store_true', help='Flag that, if enabled, will convert food tables into a tree-like format for other programs.')
     
     args = vars(parser.parse_args())
     
@@ -55,9 +57,13 @@ def main():
                 tables = soup.find_all("table", class_="prettytable")
                 for table in tables:
                     tableDict = scrapeFoodTable(table, recipeKey)
-                    #print(json.dumps(tableDict, indent=4))
-                    foodList['foods'].append(tableDict)
                     groupToFood.update({tableDict['Name']: group})
+                    
+                    #Check if we must convert the given dict into a the tree-like format
+                    if(args['t'] == True):
+                        foodList['foods'].append(convertToTree(tableDict))
+                    else:
+                        foodList['foods'].append(tableDict)
                     
                 if args['o'] != None:
                     writeJSON(args['o'], group + '.JSON', foodList)

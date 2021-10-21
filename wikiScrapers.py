@@ -10,6 +10,9 @@ def scrapeFoodTable(table, recipeKey):
     tableDict = {}
     currHead = [];
     
+    #Some recipes dont conform to the the normal recipe structure.
+    recipeIgnore = ["Wheat Flour"]
+    
     #Iterate through each tr looking for th and td.
     for tr in trList:
         innerBody = tr.find('tbody')
@@ -58,23 +61,25 @@ def scrapeFoodTable(table, recipeKey):
 
     #Modify the key:value pair "recipe" to have appropriate values.
     #{Recipe: { Ingredients: [[], []], Percentages: [[], []]}}
-    if recipeKey in tableDict:
-        #split string if it has a /
-        recipeList = [r.strip() for r in tableDict[recipeKey].split('/')]
-        finalList = []
-        for recipe in recipeList:
-            ingredientList = [i.strip() for i in recipe.split(') ')]
-            #print(ingredientList)
-            splitList = [s.split('(') for s in ingredientList]
-            for i in range(len(splitList)):
-                tuple = splitList[i]
-                tuple[0] = tuple[0].strip()
-                tuple[1] = re.sub("[^0-9]", "", tuple[1])
-                splitList[i] = tuple
-            finalList.append(splitList)
-            
-            #split inner strings even further by splitting '('
-            #Turn percentages into raw numbers.
-        tableDict['Recipe'] = finalList
+    #TODO: Update this so that recipes may also work for the "Number Food" format
+    if tableDict['Name'] not in recipeIgnore:
+        if recipeKey in tableDict:
+            #split string if it has a /
+            recipeList = [r.strip() for r in tableDict[recipeKey].split('/')]
+            finalList = []
+            for recipe in recipeList:
+                ingredientList = [i.strip() for i in recipe.split(') ')]
+                #print(ingredientList)
+                splitList = [s.split('(') for s in ingredientList]
+                for i in range(len(splitList)):
+                    tuple = splitList[i]
+                    tuple[0] = tuple[0].strip()
+                    tuple[1] = re.sub("[^0-9]", "", tuple[1])
+                    splitList[i] = tuple
+                finalList.append(splitList)
+                
+                #split inner strings even further by splitting '('
+                #Turn percentages into raw numbers.
+            tableDict['Recipe'] = finalList
     
     return tableDict

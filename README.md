@@ -39,6 +39,8 @@ https://wiki.mabinogiworld.com/view/Simmering_List
 ```
 The optional argument, -o, is a path to a folder you wish the JSONs to be written to. If this argument is not supplied, all JSON information will be printed onto the command line. If the folder does not exist, the folder will be created before writing.
 
+The optional arguement, -t, is a toggle that determines whether or not all tables will be written in a tree-like format, to be used with react-d3-tree.
+
 For example, if we decide to put the links above into a file called urls.txt, and wish to write to a folder called jsons, we would have the following command
 ```
 py scrapeFood.py multiScrape ./urls.txt ./jsons/
